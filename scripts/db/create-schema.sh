@@ -1,0 +1,53 @@
+#! /usr/bin/env bash
+. scripts/db/psql-cmd.sh
+
+mypsql <<SQL
+create table listings (
+  id serial primary key,
+  addr_1 varchar,
+  beds_1 real,
+  beds_10 real,
+  beds_2 real,
+  beds_3 real,
+  beds_4 real,
+  beds_5 real,
+  beds_6 real,
+  beds_7 real,
+  beds_8 real,
+  beds_9 real,
+  city varchar,
+  county varchar,
+  day_on_market timestamp with time zone,
+  exp_ptax real,
+  exp_total_claim_yr real,
+  goi_claim real,
+  mls real,
+  noi_claim real,
+  price_list real,
+  rent_sub_cur_1 real,
+  rent_sub_cur_10 real,
+  rent_sub_cur_2 real,
+  rent_sub_cur_3 real,
+  rent_sub_cur_4 real,
+  rent_sub_cur_5 real,
+  rent_sub_cur_6 real,
+  rent_sub_cur_7 real,
+  rent_sub_cur_8 real,
+  rent_sub_cur_9 real,
+  units real,
+  units_1 real,
+  units_10 real,
+  units_2 real,
+  units_3 real,
+  units_4 real,
+  units_5 real,
+  units_6 real,
+  units_7 real,
+  units_8 real,
+  units_9 real,
+  year real,
+  zip real,
+  zone varchar
+);
+create unique index unique_mls on listings (mls);
+SQL

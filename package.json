@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "bluebird": "^3.5.3",
+    "execa": "^1.0.0",
+    "perish": "^1.0.2",
+    "pg": "^7.7.1",
+    "pg-copy-streams": "^1.2.0",
+    "postgraphile": "^4.1.0-rc.3",
+    "typescript": "^3.2.1"
+  }
+}
