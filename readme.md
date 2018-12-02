@@ -1,15 +1,16 @@
 # problem :turtle:
 
-- generated sql is << slower than simple sql when doing basic sorting on large dataset
+- generated sql is much, much slower than simple sql when doing basic sorting on a (quasi) large dataset
 
 # example
 
-- `node demo.js`. this script:
+- run `node demo.js`. this script:
   - creates a db (docker, pg:alpine@latest)
   - upserts a schema
   - creates a bunch of fake data
-  - `COPY`s all records to the DB.  (the scripts are a little much, but i had the boilerplate ready!)
+  - `COPY`s all records to the DB.  (these scripts are a little much, but i had the boilerplate ready!)
   - starts postgraphile
+
 - open up graphiql
 
 ```gql
@@ -24,7 +25,7 @@
 }
 ```
 
-nice and quick! let's run a more interesting query:
+nice and quick! let's run a more interesting query, albeit still pretty boring:
 
 ```graphql
 {
@@ -67,10 +68,10 @@ postgraphile:postgres         ), __local_3__ as (select json_agg(to_json(__local
 0 error(s) in 15046.36ms :: { allListings(last: 10, orderBy: [MLS_DESC]) { edges { node { addr1 beds1 city county mls priceList zipzone } } } }
 ```
 
-using that generated sql, let's now jump just into a `psql` context.  let's take _just_ that subquery `postgraphile` generated for us:
+using that generated sql, let's now jump just into a `psql` context.  let's _just_ take that subquery `postgraphile` generated for us:
 
 ```sh
-$ ./scripts/db/psql.sh
+$ ./scripts/db/psql.sh # already configured to hook up to the running container
 psql (10.5)
 Type "help" for help.
 ```
@@ -83,8 +84,8 @@ from "public"."listings" as __local_2__
 where (TRUE) and (TRUE)
 order by __local_2__."mls" ASC,__local_2__."id" DESC
 limit 10;
--- 31132.781 ms :(. same w/ `EXPLAIN (ANALYZE, BUFFERS) ...`
 -- without explain analyze, ~13 seconds, repeatably
+-- with EXPLAIN (ANALYZE, BUFFERS), 31132.781 ms, repeatably
 
 -- Limit  (cost=68521.60..68521.63 rows=10 width=40) (actual time=31614.179..31614.425 rows=10 loops=1)
 --   Buffers: shared hit=2208 read=27204
@@ -107,7 +108,7 @@ limit 10;
 
 so, it would seem that the json operations are really hurting perf!
 
-i can do more debugging, but my pg-fu is weak, so i'd prefer to pair, or be assigned homework :)
+i can do more debugging, but my pg-fu is weak, so i'd prefer to pair or be assigned homework :)
 
 finally,
 
